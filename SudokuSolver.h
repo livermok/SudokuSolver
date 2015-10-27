@@ -2,7 +2,7 @@
 
 #include "SudokuPuzzle.h"
 
-class SudokuSolver : public SudokuSolver
+class SudokuSolver : public SudokuPuzzle
 {
 protected:
 	bool puzzleTruthTable[9][9][10];
