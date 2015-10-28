@@ -1,8 +1,10 @@
 #include "SudokuPuzzle.h"
 #include <stdlib.h>
+#include <string>
 
 SudokuPuzzle::SudokuPuzzle()
 {
+	convertStringToPuzzle("000000000 000000000 000000000 000000000 000000000 000000000 000000000 000000000 000000000");
 }
 
 void SudokuPuzzle::convertStringToPuzzle(std::string puzzleAsString)
@@ -13,13 +15,16 @@ void SudokuPuzzle::convertStringToPuzzle(std::string puzzleAsString)
 	{
 		for (int column = 0; column < 9; column++)
 		{
-			if (puzzleAsString[charIndex] >= '0' &&
-				puzzleAsString[charIndex] <= '9')
+			while (charIndex < puzzleAsString.length() && !(puzzleAsString.at(charIndex) >= '0' && puzzleAsString.at(charIndex) <= '9'))
 			{
-				puzzle[row][column] = puzzleAsString[charIndex] - '0';
-			}
-			else if (charIndex < puzzleAsString.length())
 				charIndex++;
+			}
+			if (puzzleAsString.at(charIndex) >= '0' &&
+				puzzleAsString.at(charIndex) <= '9')
+			{
+				puzzle[row][column] = puzzleAsString.at(charIndex) - '0';
+				charIndex++;
+			}
 			else
 				exit(0);
 		}

@@ -17,11 +17,14 @@ public:
 	
 	//Complex Logic Cluster
 	void updateTruthsImplicit();
-	void updateTruths();
+	void updateTruthsComplex();
 	int solveUniqueCellValue();
 	
 	//Logical Jump
 	SudokuSolver guessOneCell();
+
+	//Print tables
+	void printTruthTableLayer(int number);
 
 	~SudokuSolver();
 };
