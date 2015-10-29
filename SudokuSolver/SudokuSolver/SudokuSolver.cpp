@@ -47,14 +47,69 @@ void SudokuSolver::updateTruthsSimple()
 	}
 }
 
+
 int SudokuSolver::solveSimpleUniqueInRow()
 {
-	return 1;
+	int cellsSolved = 0;
+	for (int number = 1; number <= 9; number++)
+	{
+		for (int row = 0; row < 9; row++)
+		{
+			for (int column = 0; column < 9; column++)
+			{
+				if (puzzleTruthTable[row][column][number])
+				{
+					int count = 0;
+					for (int i = 0; i < 9; i++)
+					{
+						if (puzzleTruthTable[row][i][number])
+						{
+							count++;
+						}
+					}
+					if (count == 1)
+					{
+						puzzle[row][column] = number;
+						updateTruthsSimple();
+						cellsSolved++;
+					}
+				}
+			}
+		}
+	}
+	return cellsSolved;
 }
 
 int SudokuSolver::solveSimpleUniqueInColumn()
 {
-	return 1;
+	int cellsSolved = 0;
+	for (int number = 1; number <= 9; number++)
+	{
+		for (int row = 0; row < 9; row++)
+		{
+			for (int column = 0; column < 9; column++)
+			{
+				if (puzzleTruthTable[row][column][number])
+				{
+					int count = 0;
+					for (int i = 0; i < 9; i++)
+					{
+						if (puzzleTruthTable[i][column][number])
+						{
+							count++;
+						}
+					}
+					if (count == 1)
+					{
+						puzzle[row][column] = number;
+						updateTruthsSimple();
+						cellsSolved++;
+					}
+				}
+			}
+		}
+	}
+	return cellsSolved;
 }
 
 int SudokuSolver::solveSimpleUniqueInBox()
