@@ -26,11 +26,12 @@ void SudokuSolver::updateTruthsSimple()
 			if (puzzle[row][column] >= 1 && puzzle[row][column] <= 9)
 			{
 				int cellValue = puzzle[row][column];
-				//Eliminate as possibility for row and column
+				//Eliminate as possibility for row and column and all other in cell
 				for (int i = 0; i < 9; i++)
 				{
 					puzzleTruthTable[row][i][cellValue] = false;
 					puzzleTruthTable[i][column][cellValue] = false;
+					puzzleTruthTable[row][column][ i +1 ] = false;
 				}
 				//Eliminae as a possibility for the box
 				for (int i = getBoxTopRow(row, column);
@@ -114,7 +115,37 @@ int SudokuSolver::solveSimpleUniqueInColumn()
 
 int SudokuSolver::solveSimpleUniqueInBox()
 {
-	return 1;
+	int cellsSolved = 0;
+	for (int number = 1; number <= 9; number++)
+	{
+		for (int row = 0; row < 9; row++)
+		{
+			for (int column = 0; column < 9; column++)
+			{
+				if (puzzleTruthTable[row][column][number])
+				{
+					int count = 0;
+					for (int i = getBoxTopRow(row, column); i < getBoxTopRow(row, column) + 3; i++)
+					{
+						for (int j = getBoxLeftColumn(row, column); j < getBoxLeftColumn(row, column) + 3; j++)
+						{
+							if (puzzleTruthTable[i][j][number])
+							{
+								count++;
+							}
+						}
+					}
+					if (count == 1)
+					{
+						puzzle[row][column] = number;
+						updateTruthsSimple();
+						cellsSolved++;
+					}
+				}
+			}
+		}
+	}
+	return cellsSolved;
 }
 
 //Complex Logic Cluster
