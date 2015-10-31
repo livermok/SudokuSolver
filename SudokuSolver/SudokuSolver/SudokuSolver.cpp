@@ -159,6 +159,29 @@ void SudokuSolver::updateTruthsComplex()
 
 int SudokuSolver::solveUniqueCellValue()
 {
+	int cellsSolved = 0;
+	for (int row = 0; row < 9; row++)
+	{
+		for (int column = 0; column < 9; column++)
+		{
+			int count = 0;
+			for (int number = 1; number <= 9; number++)
+			{
+				if (puzzleTruthTable[row][column][number])
+					count++;
+			}
+			if (count == 1){
+				for (int number = 1; number <= 9; number++)
+				{
+					if (puzzleTruthTable[row][column][number])
+					{
+						puzzle[row][column] = number;
+						updateTruthsSimple();
+					}
+				}
+			}
+		}
+	}
 	return 1;
 }
 
