@@ -149,10 +149,83 @@ int SudokuSolver::solveSimpleUniqueInBox()
 }
 
 //Complex Logic Cluster
+
+/*
+Looks for boxes where a number has multiple possible locations but 
+these locations are unique to either a row or column thereby implying
+that that value may not occur else where in that row or column respectively.
+*/
 void SudokuSolver::updateTruthsImplicit()
 {
+	for (int box = 0; box < 9; box++)
+	{
+		for (int number = 1; number <= 9; number++)
+		{
+			//Looks for unique Row
+			int rowPossibilities = 0;
+			int implicitRow = 0;
+			for (int row = getBoxTopRow(box); row < getBoxTopRow(box) + 3; row++)
+			{
+				int presenceInRow = 0;
+				for (int column = getBoxLeftColumn(box); column < getBoxLeftColumn(box) + 3; column++)
+				{
+					if (puzzleTruthTable[row][column][number] == true)
+						presenceInRow++;
+				}
+				if (presenceInRow > 0){
+					rowPossibilities++;
+					implicitRow = row;
+				}
+			}
+			if (rowPossibilities == 1)
+			{
+				//Removes possibilities in row left of the box
+				for (int i = 0; i < getBoxLeftColumn(box); i++)
+				{
+					puzzleTruthTable[implicitRow][i][number] = false;
+				}
+				//Removes possibilities in row right of the box
+				for (int i = getBoxLeftColumn(box) + 3; i < 9; i++)
+				{
+					puzzleTruthTable[implicitRow][i][number] = false;
+				}
+			}
+			
+			//Looks for unique columns
+			int columnPossibilities = 0;
+			int implicitColumn = 0;
+			for (int column = getBoxLeftColumn(box); column < getBoxLeftColumn(box) + 3; column++)
+			{
+				
+				int presenceInColumn = 0;
+				for (int row = getBoxTopRow(box); row < getBoxTopRow(box) + 3; row++)
+				{
+					if (puzzleTruthTable[row][column][number] == true)
+						presenceInColumn++;
+				}
+				if (presenceInColumn > 0){
+					columnPossibilities++;
+					implicitColumn = column;
+				}
+			}
+			if (columnPossibilities == 1)
+			{
+				//Removes possibilities in column above the box
+				for (int i = 0; i < getBoxTopRow(box); i++)
+				{
+					puzzleTruthTable[i][implicitColumn][number] = false;
+				}
+				//Removes possibilities in column below the box
+				for (int i = getBoxTopRow(box) + 3; i < 9; i++)
+				{
+					puzzleTruthTable[i][implicitColumn][number] = false;
+				}
+			}
+		}
+	}
 }
 
+//Place holder for more complicated logical conclusions if found
 void SudokuSolver::updateTruthsComplex()
 {
 }
@@ -177,12 +250,13 @@ int SudokuSolver::solveUniqueCellValue()
 					{
 						puzzle[row][column] = number;
 						updateTruthsSimple();
+						cellsSolved++;
 					}
 				}
 			}
 		}
 	}
-	return 1;
+	return cellsSolved;
 }
 
 //Logical Jump
