@@ -241,6 +241,7 @@ int SudokuSolver::solveUniqueCellValue()
 			for (int number = 1; number <= 9; number++)
 			{
 				if (puzzleTruthTable[row][column][number])
+					
 					count++;
 			}
 			if (count == 1){
