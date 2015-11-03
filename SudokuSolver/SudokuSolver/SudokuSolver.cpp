@@ -260,6 +260,11 @@ int SudokuSolver::solveUniqueCellValue()
 	return cellsSolved;
 }
 
+void SudokuSolver::updateTruthsPair()
+{
+
+}
+
 //Logical Jump
 SudokuSolver SudokuSolver::guessOneCell()
 {
