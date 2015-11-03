@@ -19,7 +19,8 @@ public:
 	void updateTruthsImplicit();
 	void updateTruthsComplex();
 	int solveUniqueCellValue();
-	
+	void updateTruthsPair();
+
 	//Logical Jump
 	SudokuSolver guessOneCell();
 
