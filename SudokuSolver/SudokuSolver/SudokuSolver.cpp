@@ -268,8 +268,8 @@ or the only possible solution to a pair of cells is a pair of values
 void SudokuSolver::updateTruthsPair()
 {
 	//Search for only possible locations
-		//If only in one element then eliminate other possibilities from the cell
-		//If in two elements eliminate from non-deliminating element as well
+	//If only in one element then eliminate other possibilities from the cell
+	//If in two elements eliminate from non-deliminating element as well
 	for (int row = 0; row < 9; row++)
 	{
 		for (int column = 0; column < 9; column++)
@@ -308,7 +308,7 @@ void SudokuSolver::updateTruthsPair()
 						int pairRow = 0;
 						int pairColumn = 0;
 						int numberCount = 0;
-						for (int m = number; m < 10; m++)
+						for (int m = number + 1; m < 10; m++)
 						{
 							numberCount = 0;
 							if (puzzleTruthTable[row][column][m])
@@ -371,13 +371,11 @@ void SudokuSolver::updateTruthsPair()
 					}
 
 					//Pair discriminated by row 
-					//*****NEED TO FINISH below**********
 					if (inRow == 2)
 					{
-						int pairRow = 0;
 						int pairColumn = 0;
 						int numberCount = 0;
-						for (int m = number; m < 10; m++)
+						for (int m = number + 1; m < 10; m++)
 						{
 							numberCount = 0;
 							if (puzzleTruthTable[row][column][m])
@@ -386,21 +384,94 @@ void SudokuSolver::updateTruthsPair()
 								{
 									if (puzzleTruthTable[row][j][number])
 									{
+										numberCount++;
+										pairColumn = j;
 									}
+								}
+								//Qualifies as a pair
+								if (numberCount == 2 && puzzleTruthTable[row][pairColumn][number])
+								{
+									for (int z = 1; z < 10; z++)
+									{
+										puzzleTruthTable[row][column][z] = false;
+										puzzleTruthTable[row][pairColumn][z] = false;
+									}
+									//check if in two elements
+									if (getBox(row, column) == getBox(row, pairColumn))
+									{
+										for (int x = getBoxTopRow(row, column); x < getBoxTopRow(row, column) + 3; x++)
+										{
+											for (int z = getBoxLeftColumn(row, column); z < getBoxLeftColumn(row, column) + 3; z++)
+											{
+												puzzleTruthTable[x][z][number] = false;
+												puzzleTruthTable[x][z][m] = false;
+											}
+										}
+									}
+									puzzleTruthTable[row][column][number] = true;
+									puzzleTruthTable[row][pairColumn][number] = true;
+									puzzleTruthTable[row][column][m] = true;
+									puzzleTruthTable[row][pairColumn][m] = true;
+								}
+							}
+
+						}
+					}
+
+					//Pair discriminated by column
+					if (inColumn == 2)
+					{
+						int pairRow = 0;
+						int numberCount = 0;
+						for (int m = number + 1; m < 10; m++)
+						{
+							numberCount = 0;
+							if (puzzleTruthTable[row][column][m])
+							{
+								for (int j = 0; j < 9; j++)
+								{
+									if (puzzleTruthTable[j][column][number])
+									{
+										numberCount++;
+										pairRow = j;
+									}
+								}
+								//Qualifies as pair
+								if (numberCount == 2 && puzzleTruthTable[pairRow][column][number])
+								{
+									for (int z = 1; z < 10; z++)
+									{
+										puzzleTruthTable[row][column][z] = false;
+										puzzleTruthTable[pairRow][column][z] = false;
+									}
+									//check if in two elements
+									if (getBox(row, column) == getBox(pairRow, column))
+									{
+										for (int x = getBoxTopRow(row, column); x < getBoxTopRow(row, column) + 3; x++)
+										{
+											for (int z = getBoxLeftColumn(row, column); z < getBoxLeftColumn(row, column) + 3; z++)
+											{
+												puzzleTruthTable[x][z][number] = false;
+												puzzleTruthTable[x][z][m] = false;
+											}
+										}
+									}
+									puzzleTruthTable[row][column][number] = true;
+									puzzleTruthTable[pairRow][column][number] = true;
+									puzzleTruthTable[row][column][m] = true;
+									puzzleTruthTable[pairRow][column][m] = true;
 								}
 							}
 						}
 					}
-					//Pair discriminated by column
-					
 				}
 			}
 		}
 	}
 
-
+	//***********NEED to finish below here
 	//Search for only possible solutions
-		//Eliminate values from the rest of the cells in the element that the pair belongs to
+	//Eliminate values from the rest of the cells in the element that the pair belongs to
 }
 
 //Logical Jump
